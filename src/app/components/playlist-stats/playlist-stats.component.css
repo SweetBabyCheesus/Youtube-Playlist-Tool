@@ -1,0 +1,24 @@
+.array-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    cursor: pointer;
+    padding: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  li.selected {
+    background-color: #3498db; /* Change the background color when an item is selected. */
+    color: #fff;
+  }
+  
+  li:hover {
+    background-color: #f2f2f2; /* Change background color on hover for a nice effect. */
+  }
