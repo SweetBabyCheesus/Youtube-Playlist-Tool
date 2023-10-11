@@ -11,7 +11,7 @@ export class PlaylistStatsComponent implements OnInit {
   channelURL?: string;
   channelTitle?: string;
   playlists?: any;
-  playlistTitles: string[] = [];
+  playlistTitles: any[] = [];
   inputString?: string;
   result?: string;
   selectedItem?: any;
@@ -26,13 +26,18 @@ export class PlaylistStatsComponent implements OnInit {
     let lastIndexA;
     let lastIndexB;
     if (this.inputString) {
-      //Fall Video bereits aus Playlist
+      //Fall: Video bereits aus Playlist
       if (this.inputString.includes('&list=')) {
         lastIndexA = this.inputString.lastIndexOf('watch?v=');
         lastIndexB = this.inputString.lastIndexOf('&list=');
       }
+      //Fall: Video mit timestamp
+      if (this.inputString.includes('&t=')) {
+        lastIndexA = this.inputString.lastIndexOf('watch?v=');
+        lastIndexB = this.inputString.lastIndexOf('&t=');
+      }
       if (!this.inputString.includes('&list=')) {
-        //Fall Video + Channel
+        //Fall: Video + Channel
         lastIndexA = this.inputString.lastIndexOf('watch?v=');
         lastIndexB = this.inputString.lastIndexOf('&ab_channel=');
       }
@@ -40,7 +45,7 @@ export class PlaylistStatsComponent implements OnInit {
       if (lastIndexA && lastIndexB && lastIndexA >= 0 && lastIndexB >= 0) {
         this.result = this.inputString.substring(lastIndexA + 8, lastIndexB);
       } else {
-        //Fall Video ohne Channel
+        //Fall: Video ohne Channel
         this.result = this.getvideoIDforNoChannelInUrl(this.inputString);
       }
       this.YoutubeApiV3Service.getVideoInfo(this.result).subscribe(
@@ -56,7 +61,7 @@ export class PlaylistStatsComponent implements OnInit {
                   if (response.items.length > 0) {
                     this.playlists = response;
                     response.items.forEach((element: any) =>
-                      this.playlistTitles.push(element.snippet.title)
+                      this.playlistTitles.push(element)
                     );
                     this.channelTitle = response.items[0].snippet.channelTitle;
                     console.log(
@@ -86,6 +91,12 @@ export class PlaylistStatsComponent implements OnInit {
     console.log(this.playlistTitles);
   }
 
+  concatenatedUrl(a : any): string {
+    let videoUrl = a.snippet.resourceId.videoId;
+    console.log(a)
+    return `https://www.youtube.com/watch?v=` + videoUrl;
+  }
+
   getvideoIDforNoChannelInUrl(input: string): string {
     const parts = input.split('watch?v=');
     if (parts.length > 1) {
@@ -99,17 +110,19 @@ export class PlaylistStatsComponent implements OnInit {
     this.playListItems = []
     this.selectedItem = item;
     console.log(this.selectedItem);
+    console.log(this.playlists);
     let entryID = this.playlists.items.find(
-      (item: any) => item.snippet.title === this.selectedItem
+      (item: any) => item.snippet.title === this.selectedItem.snippet.title
     ).id;
+    console.log(entryID)
     this.YoutubeApiV3Service.getPlaylistItems(entryID).subscribe((response) => {
 
       response.items.forEach((element: any) =>
-      this.playListItems.push(element.snippet.title)
+      this.playListItems.push(element)
     );
       //this.playListItems = response;
       console.log(response)
-      console.log(this.playListItems.items);
+      console.log(this.playListItems);
     });
   }
 }

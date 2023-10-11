@@ -1,5 +1,5 @@
 <div class="center" style="text-align: center">
-  <h1 style="font-size: 2.5vw">youtube playlist hot word analyser</h1>
+  <h1 style="font-size: 2.5vw">youtube playlist tool</h1>
 </div>
 
 <div class="center" style="text-align: center">
@@ -20,7 +20,10 @@
   ></button>
   <br /><br />
   <div *ngIf="channelTitle">
-    <span><b>{{channelTitle}}'s playlists</b></span>
+    <span
+      ><b>{{ channelTitle }}'s playlists</b></span
+    >
+
     <div class="array-container">
       <ul>
         <li
@@ -28,24 +31,28 @@
           (click)="selectItem(item)"
           [class.selected]="item === selectedItem"
         >
-          {{ item }}
+          <img src="{{ item?.snippet?.thumbnails?.default?.url }}" /><br />
+          {{ item.snippet.title }}
         </li>
       </ul>
     </div>
-<br><br><br>
+    <br /><br /><br />
     <div *ngIf="selectedItem">
-      <span>videos from <b>{{channelTitle}}</b>'s playlist <b>{{selectedItem}}</b></span>
-    <div class="array-container">
-      <ul>
-        <li
-          *ngFor="let item of playListItems"
-          (click)="selectItem(item)"
-          [class.selected]="item === selectedItem"
-        >
-          {{ item }}
-        </li>
-      </ul>
-    </div>
+      <span
+        >videos from <b>{{ channelTitle }}</b
+        >'s playlist <b>{{ selectedItem.snippet.title }}</b></span
+      >
+      <div class="array-container">
+        <ul>
+          <li
+            *ngFor="let item of playListItems"
+            [class.selected]="item === selectedItem"
+          >
+          <a [href]="concatenatedUrl(item)"><img src="{{ item?.snippet?.thumbnails?.default?.url }}" /></a><br />
+            <a [href]="concatenatedUrl(item)">{{ item.snippet.title }}</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
