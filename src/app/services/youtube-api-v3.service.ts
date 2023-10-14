@@ -31,13 +31,15 @@ export class YoutubeApiV3Service {
     return this.http.get(this.apiUrlChannel, { params });
   }
 
-  getPlaylistItems(playlistId: string): Observable<any> {
+  getPlaylistItems(playlistId: string, nextPageToken?: string): Observable<any> {
     const params = {
       key: this.apiKey,
       playlistId: playlistId,
       part: 'snippet',
       maxResults: '50',
+      pageToken: ''
     };
+    if (nextPageToken) params.pageToken = nextPageToken;
 
     return this.http.get(this.apiUrlPlaylist, { params });
   }

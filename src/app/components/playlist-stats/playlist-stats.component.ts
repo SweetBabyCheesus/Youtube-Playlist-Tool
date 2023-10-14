@@ -15,7 +15,7 @@ export class PlaylistStatsComponent implements OnInit {
   inputString?: string;
   result?: string;
   selectedItem?: any;
-  playListItems?: any;
+  playListItems: GoogleApiYouTubePlaylistItemResource[] = [];
 
   constructor(private YoutubeApiV3Service: YoutubeApiV3Service) {}
   ngOnInit(): void {}
@@ -67,9 +67,6 @@ export class PlaylistStatsComponent implements OnInit {
                     console.log(
                       'Playlists für ' + this.channelTitle + ' gefunden'
                     );
-                    this.YoutubeApiV3Service.getPlaylistItems(
-                      'PLwX7q14hURZnVusI2kWKGJppipgpGpFDs'
-                    ).subscribe();
                   } else {
                     console.error('No Playlists found.');
                   }
@@ -91,9 +88,9 @@ export class PlaylistStatsComponent implements OnInit {
     console.log(this.playlistTitles);
   }
 
-  concatenatedUrl(a : any): string {
+  concatenatedUrl(a: any): string {
     let videoUrl = a.snippet.resourceId.videoId;
-    console.log(a)
+    console.log(a);
     return `https://www.youtube.com/watch?v=` + videoUrl;
   }
 
@@ -106,23 +103,20 @@ export class PlaylistStatsComponent implements OnInit {
     }
   }
 
-  selectItem(item: string): void {
-    this.playListItems = []
+  selectItem(item: string, nextPageToken?: string): void {
     this.selectedItem = item;
-    console.log(this.selectedItem);
-    console.log(this.playlists);
     let entryID = this.playlists.items.find(
       (item: any) => item.snippet.title === this.selectedItem.snippet.title
     ).id;
-    console.log(entryID)
-    this.YoutubeApiV3Service.getPlaylistItems(entryID).subscribe((response) => {
-
-      response.items.forEach((element: any) =>
-      this.playListItems.push(element)
+    console.log(entryID);
+    this.YoutubeApiV3Service.getPlaylistItems(entryID, nextPageToken).subscribe(
+      (response) => {
+        response.items.forEach((element: any) =>
+          this.playListItems.push(element)
+        );
+        if (response.nextPageToken)
+          this.selectItem(this.selectedItem, response.nextPageToken);
+      }
     );
-      //this.playListItems = response;
-      console.log(response)
-      console.log(this.playListItems);
-    });
   }
 }

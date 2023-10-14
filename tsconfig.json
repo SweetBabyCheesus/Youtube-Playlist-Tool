@@ -18,6 +18,7 @@
     "importHelpers": true,
     "target": "es2020",
     "module": "es2020",
+    "types": [ "node", "gapi.youtube" ],
     "lib": [
       "es2020",
       "dom"
