@@ -16,6 +16,8 @@ export class PlaylistStatsComponent implements OnInit {
   result?: string;
   selectedItem?: any;
   playListItems: GoogleApiYouTubePlaylistItemResource[] = [];
+  sortedObject: any;
+  sortedWords: any;
 
   constructor(private YoutubeApiV3Service: YoutubeApiV3Service) {}
   ngOnInit(): void {}
@@ -90,7 +92,6 @@ export class PlaylistStatsComponent implements OnInit {
 
   concatenatedUrl(a: any): string {
     let videoUrl = a.snippet.resourceId.videoId;
-    console.log(a);
     return `https://www.youtube.com/watch?v=` + videoUrl;
   }
 
@@ -104,12 +105,11 @@ export class PlaylistStatsComponent implements OnInit {
   }
 
   selectItem(item: string, nextPageToken?: string): void {
-    if (this.selectedItem !== item) this.playListItems=[]
+    if (this.selectedItem !== item) this.playListItems = [];
     this.selectedItem = item;
     let entryID = this.playlists.items.find(
       (item: any) => item.snippet.title === this.selectedItem.snippet.title
     ).id;
-    console.log(entryID);
     this.YoutubeApiV3Service.getPlaylistItems(entryID, nextPageToken).subscribe(
       (response) => {
         response.items.forEach((element: any) =>
@@ -117,7 +117,38 @@ export class PlaylistStatsComponent implements OnInit {
         );
         if (response.nextPageToken)
           this.selectItem(this.selectedItem, response.nextPageToken);
+        else {
+          //fertig
+          this.countHotWords();
+        }
       }
     );
+  }
+
+  countHotWords() {
+    let wordArray: string[] = [];
+    let wordObject: any = {};
+    this.playListItems.forEach((item) => {
+      let tempString = item.snippet.title.split(' ');
+      tempString.forEach((word) => wordArray.push(word.charAt(0).toUpperCase() + word.slice(1)));
+    });
+    wordArray.forEach((word) => {
+      if (!wordObject[word]) {
+        wordObject[word] = 1;
+      } else {
+        wordObject[word] = wordObject[word] + 1;
+      }
+    });
+
+    let entries = Object.entries(wordObject);
+
+    this.sortedWords = entries.sort((a: any, b: any) => b[1] - a[1]);
+
+    this.sortedWords = this.sortedWords.map((item: any) => {
+      return item.toString().replace(new RegExp(',', 'g'), ' : ');
+    });
+    console.log(this.sortedWords);
+    console.log(wordObject);
+    console.log(this.sortedObject);
   }
 }
