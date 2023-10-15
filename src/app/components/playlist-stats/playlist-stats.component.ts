@@ -104,6 +104,7 @@ export class PlaylistStatsComponent implements OnInit {
   }
 
   selectItem(item: string, nextPageToken?: string): void {
+    if (this.selectedItem !== item) this.playListItems=[]
     this.selectedItem = item;
     let entryID = this.playlists.items.find(
       (item: any) => item.snippet.title === this.selectedItem.snippet.title
