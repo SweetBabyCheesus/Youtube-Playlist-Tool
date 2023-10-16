@@ -23,6 +23,7 @@
     "@angular/youtube-player": "^16.2.8",
     "@types/gapi.youtube": "^3.0.36",
     "@types/youtube": "^0.0.48",
+    "angular-cli-ghpages": "^1.0.7",
     "material-icons": "^1.11.5",
     "node": "~16.14",
     "primeicons": "^6.0.1",
