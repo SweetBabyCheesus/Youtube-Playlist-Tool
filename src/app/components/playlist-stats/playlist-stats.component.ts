@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { YoutubeApiV3Service } from 'src/app/services/youtube-api-v3.service';
+import { YoutubePlayerService } from 'src/app/services/youtube-player.service';
 
 @Component({
   selector: 'app-playlist-stats',
@@ -19,7 +20,7 @@ export class PlaylistStatsComponent implements OnInit {
   sortedObject: any;
   sortedWords: any;
 
-  constructor(private YoutubeApiV3Service: YoutubeApiV3Service) {}
+  constructor(private YoutubeApiV3Service: YoutubeApiV3Service, private YoutubePlayerService: YoutubePlayerService) {}
   ngOnInit(): void {}
 
   getPlaylists(): void {
@@ -150,5 +151,10 @@ export class PlaylistStatsComponent implements OnInit {
     console.log(this.sortedWords);
     console.log(wordObject);
     console.log(this.sortedObject);
+  }
+
+  startVideoPlayer(videoId : string){
+    this.YoutubePlayerService.setVideoId(videoId);
+    console.log("start1")
   }
 }

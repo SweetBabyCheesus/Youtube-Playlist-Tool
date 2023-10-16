@@ -65,13 +65,15 @@
             *ngFor="let item of playListItems"
             [class.selected]="item === selectedItem"
           >
-            <a [href]="concatenatedUrl(item)"
-              ><img src="{{ item?.snippet?.thumbnails?.default?.url }}" /></a
+            <span (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
+              ><img src="{{ item?.snippet?.thumbnails?.default?.url }}" /></span
             ><br />
-            <a [href]="concatenatedUrl(item)">{{ item.snippet.title }}</a>
+            <span (click)="startVideoPlayer(item.snippet.resourceId.videoId)" >{{ item.snippet.title }}</span>
           </li>
         </ul>
       </div>
     </div>
   </div>
 </div>
+
+<app-youtube-player videoId="HWqkh98cVa4"></app-youtube-player>

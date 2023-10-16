@@ -8,7 +8,8 @@ import {FormsModule} from '@angular/forms';
 import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {HttpClientModule} from '@angular/common/http'
-import {HttpClient} from '@angular/common/http'
+import {HttpClient} from '@angular/common/http';
+import { YoutubePlayerModule } from './components/youtube-player/youtube-player.module'
 
 @NgModule({
   declarations: [
@@ -25,6 +26,8 @@ import {HttpClient} from '@angular/common/http'
     ButtonModule,
     FormsModule,
     HttpClientModule,
+    YoutubePlayerModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
