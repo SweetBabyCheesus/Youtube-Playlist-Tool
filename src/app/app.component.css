@@ -9,12 +9,6 @@ div.center {
   div {
     text-align: center;
 }
-#orderName {
-    vertical-align: middle;
-}
-#orderNo {
-    float: left;
-}
 
 * {
     font-family: Raleway /* Replace with your custom font */, sans-serif !important; 

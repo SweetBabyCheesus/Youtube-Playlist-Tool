@@ -15,12 +15,18 @@ export class PlaylistStatsComponent implements OnInit {
   playlistTitles: any[] = [];
   inputString?: string;
   result?: string;
-  selectedItem?: any;
+  selectedPlaylist?: any;
+  selectedVideo?: GoogleApiYouTubePlaylistItemResource;
   playListItems: GoogleApiYouTubePlaylistItemResource[] = [];
-  sortedObject: any;
+  filteredplayListItems: GoogleApiYouTubePlaylistItemResource[] = [];
+  sortedObject: GoogleApiYouTubePlaylistItemResource[] = [];
   sortedWords: any;
+  filterWord: string = '';
 
-  constructor(private YoutubeApiV3Service: YoutubeApiV3Service, private YoutubePlayerService: YoutubePlayerService) {}
+  constructor(
+    private YoutubeApiV3Service: YoutubeApiV3Service,
+    private YoutubePlayerService: YoutubePlayerService
+  ) {}
   ngOnInit(): void {}
 
   getPlaylists(): void {
@@ -31,13 +37,15 @@ export class PlaylistStatsComponent implements OnInit {
     if (this.inputString) {
       //Fall: Video bereits aus Playlist
       if (this.inputString.includes('&list=')) {
+        console.log("da")
         lastIndexA = this.inputString.lastIndexOf('watch?v=');
         lastIndexB = this.inputString.lastIndexOf('&list=');
       }
       //Fall: Video mit timestamp
       if (this.inputString.includes('&t=')) {
+        let temp = this.inputString.split("&t=");
+        this.inputString = temp[0];
         lastIndexA = this.inputString.lastIndexOf('watch?v=');
-        lastIndexB = this.inputString.lastIndexOf('&t=');
       }
       if (!this.inputString.includes('&list=')) {
         //Fall: Video + Channel
@@ -91,11 +99,6 @@ export class PlaylistStatsComponent implements OnInit {
     console.log(this.playlistTitles);
   }
 
-  concatenatedUrl(a: any): string {
-    let videoUrl = a.snippet.resourceId.videoId;
-    return `https://www.youtube.com/watch?v=` + videoUrl;
-  }
-
   getvideoIDforNoChannelInUrl(input: string): string {
     const parts = input.split('watch?v=');
     if (parts.length > 1) {
@@ -105,11 +108,11 @@ export class PlaylistStatsComponent implements OnInit {
     }
   }
 
-  selectItem(item: string, nextPageToken?: string): void {
-    if (this.selectedItem !== item) this.playListItems = [];
-    this.selectedItem = item;
+  selectPlaylist(item: string, nextPageToken?: string): void {
+    if (this.selectedPlaylist !== item) this.playListItems = [];
+    this.selectedPlaylist = item;
     let entryID = this.playlists.items.find(
-      (item: any) => item.snippet.title === this.selectedItem.snippet.title
+      (item: any) => item.snippet.title === this.selectedPlaylist.snippet.title
     ).id;
     this.YoutubeApiV3Service.getPlaylistItems(entryID, nextPageToken).subscribe(
       (response) => {
@@ -117,7 +120,7 @@ export class PlaylistStatsComponent implements OnInit {
           this.playListItems.push(element)
         );
         if (response.nextPageToken)
-          this.selectItem(this.selectedItem, response.nextPageToken);
+          this.selectPlaylist(this.selectedPlaylist, response.nextPageToken);
         else {
           //fertig
           this.countHotWords();
@@ -126,12 +129,18 @@ export class PlaylistStatsComponent implements OnInit {
     );
   }
 
+  selectVideo(video: GoogleApiYouTubePlaylistItemResource): void {
+    this.selectedVideo = video;
+  }
+
   countHotWords() {
     let wordArray: string[] = [];
     let wordObject: any = {};
     this.playListItems.forEach((item) => {
       let tempString = item.snippet.title.split(' ');
-      tempString.forEach((word) => wordArray.push(word.charAt(0).toUpperCase() + word.slice(1)));
+      tempString.forEach((word) =>
+        wordArray.push(word.charAt(0).toUpperCase() + word.slice(1))
+      );
     });
     wordArray.forEach((word) => {
       if (!wordObject[word]) {
@@ -142,15 +151,35 @@ export class PlaylistStatsComponent implements OnInit {
     });
 
     let entries = Object.entries(wordObject);
-
     this.sortedWords = entries.sort((a: any, b: any) => b[1] - a[1]);
-
     this.sortedWords = this.sortedWords.map((item: any) => {
-      return item.toString().replace(new RegExp(',', 'g'), ' : ');
+      return item
+        .toString()
+        .replace(new RegExp(',', 'g'), ' : ')
+        .replace(/ /g, '\xa0');
     });
   }
 
-  startVideoPlayer(videoId : string){
+  startVideoPlayer(videoId: string) {
     this.YoutubePlayerService.setVideoId(videoId);
+  }
+
+  reload() {
+    window.location.reload();
+  }
+
+  selectWord(filterWord: any) {
+    if (this.filterWord === filterWord) {
+      this.filterWord = '';
+    } else {
+      this.filterWord = filterWord;
+      this.filterPlaylist(filterWord);
+    }
+  }
+
+  filterPlaylist(filterExpr: string){
+    console.log(filterExpr)
+    let afilterWord = filterExpr.split(":");
+    this.filteredplayListItems = this.playListItems.filter(elem => elem.snippet.title.includes(afilterWord[0].slice(0 ,-1)))
   }
 }

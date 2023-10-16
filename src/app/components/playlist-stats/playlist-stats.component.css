@@ -1,24 +1,73 @@
 .array-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  li {
-    cursor: pointer;
-    padding: 10px;
-    transition: background-color 0.3s;
-  }
-  
-  li.selected {
-    background-color: #3498db; /* Change the background color when an item is selected. */
-    color: #fff;
-  }
-  
-  li:hover {
-    background-color: #f2f2f2; /* Change background color on hover for a nice effect. */
-  }
+  display: flex;
+  flex-direction: column;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  cursor: pointer;
+  padding: 10px;
+  transition: background-color 0.3s;
+}
+
+li.selectedPlaylist {
+  background-color: black; /* Change the background color when an item is selected. */
+  color: #fff;
+}
+
+li.selectedVideo {
+  background-color: #646464; /* Change the background color when an item is selected. */
+  color: #fff;
+}
+
+li:hover {
+  background-color: #f2f2f2; /* Change background color on hover for a nice effect. */
+}
+
+.center {
+  text-align: center;
+}
+
+.p-button.p-button-success, .p-buttonset.p-button-success > .p-button, .p-splitbutton.p-button-success > .p-button {
+  color: #ffffff;
+  background: black !important;
+  border: 1px solid black !important;
+}
+
+.hot-word {
+  border: 2px solid rgb(56, 56, 56);
+  border-radius: 400px;
+  padding: 8px;
+  background-color: rgb(190, 190, 190);
+  margin: 3px;
+  cursor: pointer;
+}
+
+.hot-word.selected {
+  border: 2px solid rgb(56, 56, 56);
+  border-radius: 400px;
+  padding: 8px;
+  background-color: rgb(208, 255, 0);
+  margin: 3px
+}
+
+img:hover{
+  cursor: pointer;
+}
+
+input{
+  width: 450px;
+}
+
+hr{
+  transform: translateY(-10px)
+}
+
+body{
+  background-image: linear-gradient(white, pink);
+  height: 100vh;
+}
