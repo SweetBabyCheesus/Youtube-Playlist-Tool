@@ -148,13 +148,9 @@ export class PlaylistStatsComponent implements OnInit {
     this.sortedWords = this.sortedWords.map((item: any) => {
       return item.toString().replace(new RegExp(',', 'g'), ' : ');
     });
-    console.log(this.sortedWords);
-    console.log(wordObject);
-    console.log(this.sortedObject);
   }
 
   startVideoPlayer(videoId : string){
     this.YoutubePlayerService.setVideoId(videoId);
-    console.log("start1")
   }
 }

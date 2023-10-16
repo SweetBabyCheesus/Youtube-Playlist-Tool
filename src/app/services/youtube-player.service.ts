@@ -13,7 +13,5 @@ private videoIdSubject: Subject<string> = new Subject;
 
   setVideoId(videoId: string){
     this.videoIdSubject.next(videoId)
-    console.log("start2")
-
   }
 }
