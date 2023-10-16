@@ -178,8 +178,7 @@ export class PlaylistStatsComponent implements OnInit {
   }
 
   filterPlaylist(filterExpr: string){
-    console.log(filterExpr)
     let afilterWord = filterExpr.split(":");
-    this.filteredplayListItems = this.playListItems.filter(elem => elem.snippet.title.includes(afilterWord[0].slice(0 ,-1)))
+    this.filteredplayListItems = this.playListItems.filter(elem => elem.snippet.title.toLowerCase().includes(afilterWord[0].slice(0 ,-1).toLowerCase()))
   }
 }

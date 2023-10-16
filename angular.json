@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "YoutubeAPIShizzle": {
+    "YoutubePlaylistTool": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/youtube-apishizzle",
+            "outputPath": "dist/youtube-playlist-tool",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "YoutubeAPIShizzle:build:production"
+              "browserTarget": "YoutubePlaylistTool:build:production"
             },
             "development": {
-              "browserTarget": "YoutubeAPIShizzle:build:development"
+              "browserTarget": "YoutubePlaylistTool:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +78,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "YoutubeAPIShizzle:build"
+            "browserTarget": "YoutubePlaylistTool:build"
           }
         },
         "test": {
@@ -97,6 +97,9 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
