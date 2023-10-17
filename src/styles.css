@@ -15,3 +15,8 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+
+html{
+  background-color: pink;
+  height: 100%;
+}

@@ -1,184 +1,190 @@
-<body style="display: block">
-  <!--HEADER-->
-  <div style="background-color: lightgrey; padding: 7px 0px 10px 10px">
-    <div style="position: absolute; top: 0; margin: 8px 4px 4px -4px">
-      <img
-        alt="YT Playlist Tool"
-        width="230"
-        height="auto"
-        src="assets/logo.png"
-        (click)="reload()"
-        class="pointer"
-      />
-    </div>
-    <div class="center">
-      <div>
-        <span class="center p-input-icon-right">
-          <label style="width: 175px" id="float-input"
-            >a random video of the channel: 
-          </label>
-
-          <input type="text" pInputText [(ngModel)]="inputString" />&nbsp;
-        </span>
-        <button
-          pButton
-          pRipple
-          type="button"
-          icon="pi pi-search"
-          class="p-button-rounded p-button-success"
-          (click)="getPlaylists()"
-        ></button>
+<html>
+  <body style="display: block">
+    <!--HEADER-->
+    <div style="background-color: lightgrey; padding: 7px 0px 10px 10px">
+      <div style="position: absolute; top: 0; margin: 8px 4px 4px -4px">
+        <img
+          alt="YT Playlist Tool"
+          width="230"
+          height="auto"
+          src="assets/logo.png"
+          (click)="reload()"
+          class="pointer"
+        />
       </div>
-    </div>
-  </div>
-  <hr />
-  <br />
-  <!--Content-->
-  <div style="display: flex">
-    <!--Playlists-->
-    <div
-      style="
-        width: 20%;
-        max-width: 250px;
-        max-width: 150px;
-        margin: 0 15px 15px 15px;
-      "
-      class="center"
-      *ngIf="channelTitle"
-    >
-      <span
-        ><b>{{ channelTitle }}'s playlists</b></span
-      >
-
-      <div class="array-container">
-        <ul>
-          <li
-            *ngFor="let item of playlistTitles"
-            (click)="selectPlaylist(item)"
-            [class.selectedPlaylist]="item === selectedPlaylist"
-          >
-            <img src="{{ item?.snippet?.thumbnails?.default?.url }}" /><br />
-            {{ item.snippet.title }}
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!--Videos-->
-    <div style="margin: 0 15px 15px 15px">
-      <!--Hotwords-->
-      <div
-        style="min-width: 280px; max-width: 480px"
-        *ngIf="sortedWords"
-        class="center"
-      >
-        <span
-          ><b>Hot Words in {{ selectedPlaylist.snippet.title }}🔥</b></span
-        ><br />
-        <div class="center" style="text-align: center; display: inline-flex">
-          <div
-            class="hot-word"
-            *ngFor="let sortedWord of sortedWords | slice : 0 : 5"
-            (click)="selectWord(sortedWord)"
-            [class.selected]="sortedWord === filterWord"
-          >
-            <span class="unselectable">{{ sortedWord }}</span>
-          </div>
-        </div>
-        <br />
-        <div class="center" style="text-align: center; display: inline-flex">
-          <div
-            class="hot-word"
-            *ngFor="let sortedWord of sortedWords | slice : 5 : 10"
-            (click)="selectWord(sortedWord)"
-            [class.selected]="sortedWord === filterWord"
-          >
-            <span class="unselectable">{{ sortedWord }}</span>
-          </div>
-        </div>
-        <br />
-        <div class="center" style="text-align: center; display: inline-flex">
-          <div
-            class="hot-word"
-            *ngFor="let sortedWord of sortedWords | slice : 10 : 15"
-            (click)="selectWord(sortedWord)"
-            [class.selected]="sortedWord === filterWord"
-          >
-            <span class="unselectable">{{ sortedWord }}</span>
-          </div>
-        </div>
-      </div>
-
-      <br />
-      <!--Items-->
-      <div
-        style="min-width: 280px; max-width: 380px"
-        *ngIf="selectedPlaylist && filterWord==''"
-        class="center"
-      >
+      <div class="center">
         <div>
-          <span
-            >videos from <b>{{ channelTitle }}</b
-            >'s playlist <b>{{ selectedPlaylist.snippet.title }}</b></span
-          >
-          <div class="array-container">
-            <ul>
-              <li
-                *ngFor="let item of playListItems"
-                (click)="selectVideo(item)"
-                [class.selectedVideo]="item === selectedVideo"
-              >
-                <span
-                  (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
-                  ><img
-                    src="{{ item?.snippet?.thumbnails?.default?.url }}" /></span
-                ><br />
-                <span
-                  (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
-                  >{{ item.snippet.title }}</span
-                >
-              </li>
-            </ul>
-          </div>
+          <span class="center p-input-icon-right">
+            <label style="width: 175px" id="float-input"
+              >a random video of the channel:
+            </label>
+
+            <input type="text" pInputText [(ngModel)]="inputString" />&nbsp;
+          </span>
+          <button
+            pButton
+            pRipple
+            type="button"
+            icon="pi pi-search"
+            class="p-button-rounded p-button-success"
+            (click)="getPlaylists()"
+          ></button>
         </div>
       </div>
+    </div>
+    <hr />
+    <br />
+    <!--Content-->
+    <div style="display: flex">
+      <!--Playlists-->
       <div
-      style="min-width: 280px; max-width: 380px"
-      *ngIf="selectedPlaylist && filterWord!==''"
-      class="center"
-    >
-      <div>
+        style="
+          width: 20%;
+          max-width: 250px;
+          max-width: 150px;
+          margin: 0 15px 15px 15px;
+        "
+        class="center"
+        *ngIf="channelTitle"
+      >
         <span
-          >videos from <b>{{ channelTitle }}</b
-          >'s playlist <b>{{ selectedPlaylist.snippet.title }}</b></span
+          ><b>{{ channelTitle }}'s playlists</b></span
         >
+
         <div class="array-container">
           <ul>
             <li
-              *ngFor="let item of filteredplayListItems"
-              (click)="selectVideo(item)"
-              [class.selectedVideo]="item === selectedVideo"
+              *ngFor="let item of playlistTitles"
+              (click)="selectPlaylist(item)"
+              [class.selectedPlaylist]="item === selectedPlaylist"
             >
-              <span
-                (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
-                ><img
-                  src="{{ item?.snippet?.thumbnails?.default?.url }}" /></span
-              ><br />
-              <span
-                (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
-                >{{ item.snippet.title }}</span
-              >
+              <img src="{{ item?.snippet?.thumbnails?.default?.url }}" /><br />
+              {{ item.snippet.title }}
             </li>
           </ul>
         </div>
       </div>
+      <!--Videos-->
+      <div style="margin: 0 15px 15px 15px">
+        <!--Hotwords-->
+        <div
+          style="min-width: 280px; max-width: 480px"
+          *ngIf="sortedWords"
+          class="center"
+        >
+          <span
+            ><b>Hot Words in {{ selectedPlaylist.snippet.title }}🔥</b></span
+          ><br />
+          <div class="center" style="text-align: center; display: inline-flex">
+            <div
+              class="hot-word"
+              *ngFor="let sortedWord of sortedWords | slice : 0 : 5"
+              (click)="selectWord(sortedWord)"
+              [class.selected]="sortedWord === filterWord"
+            >
+              <span class="unselectable">{{ sortedWord }}</span>
+            </div>
+          </div>
+          <br />
+          <div class="center" style="text-align: center; display: inline-flex">
+            <div
+              class="hot-word"
+              *ngFor="let sortedWord of sortedWords | slice : 5 : 10"
+              (click)="selectWord(sortedWord)"
+              [class.selected]="sortedWord === filterWord"
+            >
+              <span class="unselectable">{{ sortedWord }}</span>
+            </div>
+          </div>
+          <br />
+          <div class="center" style="text-align: center; display: inline-flex">
+            <div
+              class="hot-word"
+              *ngFor="let sortedWord of sortedWords | slice : 10 : 15"
+              (click)="selectWord(sortedWord)"
+              [class.selected]="sortedWord === filterWord"
+            >
+              <span class="unselectable">{{ sortedWord }}</span>
+            </div>
+          </div>
+        </div>
+
+        <br />
+        <!--Items-->
+        <div
+          style="min-width: 280px; max-width: 380px"
+          *ngIf="selectedPlaylist && filterWord == ''"
+          class="center"
+        >
+          <div>
+            <span
+              >videos from <b>{{ channelTitle }}</b
+              >'s playlist <b>{{ selectedPlaylist.snippet.title }}</b></span
+            >
+            <div class="array-container">
+              <ul>
+                <li
+                  *ngFor="let item of playListItems"
+                  (click)="selectVideo(item)"
+                  [class.selectedVideo]="item === selectedVideo"
+                >
+                  <span
+                    (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
+                    ><img
+                      src="{{
+                        item?.snippet?.thumbnails?.default?.url
+                      }}" /></span
+                  ><br />
+                  <span
+                    (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
+                    >{{ item.snippet.title }}</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div
+          style="min-width: 280px; max-width: 380px"
+          *ngIf="selectedPlaylist && filterWord !== ''"
+          class="center"
+        >
+          <div>
+            <span
+              >videos from <b>{{ channelTitle }}</b
+              >'s playlist <b>{{ selectedPlaylist.snippet.title }}</b></span
+            >
+            <div class="array-container">
+              <ul>
+                <li
+                  *ngFor="let item of filteredplayListItems"
+                  (click)="selectVideo(item)"
+                  [class.selectedVideo]="item === selectedVideo"
+                >
+                  <span
+                    (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
+                    ><img
+                      src="{{
+                        item?.snippet?.thumbnails?.default?.url
+                      }}" /></span
+                  ><br />
+                  <span
+                    (click)="startVideoPlayer(item.snippet.resourceId.videoId)"
+                    >{{ item.snippet.title }}</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Player-->
+      <div class="center" style="margin: 0px 25px 25px 25px; min-width: 55%">
+        <app-youtube-player
+          class="center"
+          videoId="HWqkh98cVa4"
+        ></app-youtube-player>
+      </div>
     </div>
-    </div>
-    <!--Player-->
-    <div class="center" style="margin: 0px 25px 25px 25px; min-width: 55%">
-      <app-youtube-player
-        class="center"
-        videoId="HWqkh98cVa4"
-      ></app-youtube-player>
-    </div>
-  </div>
-</body>
+  </body>
+</html>
