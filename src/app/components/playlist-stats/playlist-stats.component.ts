@@ -109,7 +109,7 @@ export class PlaylistStatsComponent implements OnInit {
   }
 
   selectPlaylist(item: string, nextPageToken?: string): void {
-    if (this.selectedPlaylist !== item) this.playListItems = [];
+  this.playListItems = [];
     this.selectedPlaylist = item;
     let entryID = this.playlists.items.find(
       (item: any) => item.snippet.title === this.selectedPlaylist.snippet.title
@@ -120,7 +120,7 @@ export class PlaylistStatsComponent implements OnInit {
           this.playListItems.push(element)
         );
         if (response.nextPageToken)
-          this.selectPlaylist(this.selectedPlaylist, response.nextPageToken);
+          this.selectPlaylistForNextPage(response.nextPageToken);
         else {
           //fertig
           this.countHotWords();
@@ -129,6 +129,25 @@ export class PlaylistStatsComponent implements OnInit {
     );
   }
 
+  selectPlaylistForNextPage(nextPageToken?: string): void {
+      let entryID = this.playlists.items.find(
+        (item: any) => item.snippet.title === this.selectedPlaylist.snippet.title
+      ).id;
+      this.YoutubeApiV3Service.getPlaylistItems(entryID, nextPageToken).subscribe(
+        (response) => {
+          response.items.forEach((element: any) =>
+            this.playListItems.push(element)
+          );
+          if (response.nextPageToken)
+            this.selectPlaylistForNextPage(response.nextPageToken);
+          else {
+            //fertig
+            this.countHotWords();
+          }
+        }
+      );
+    }
+
   selectVideo(video: GoogleApiYouTubePlaylistItemResource): void {
     this.selectedVideo = video;
   }
@@ -136,6 +155,7 @@ export class PlaylistStatsComponent implements OnInit {
   countHotWords() {
     let wordArray: string[] = [];
     let wordObject: any = {};
+
     this.playListItems.forEach((item) => {
       let tempString = item.snippet.title.split(' ');
       tempString.forEach((word) =>
@@ -151,6 +171,7 @@ export class PlaylistStatsComponent implements OnInit {
     });
 
     let entries = Object.entries(wordObject);
+    this.sortedWords = undefined;
     this.sortedWords = entries.sort((a: any, b: any) => b[1] - a[1]);
     this.sortedWords = this.sortedWords.map((item: any) => {
       return item
@@ -158,6 +179,14 @@ export class PlaylistStatsComponent implements OnInit {
         .replace(new RegExp(',', 'g'), ' : ')
         .replace(/ /g, '\xa0');
     });
+    console.log(wordArray)
+    console.log(wordObject)
+    console.log(this.playListItems)
+    console.log(entries)
+console.log(this.sortedWords)
+
+
+
   }
 
   startVideoPlayer(videoId: string) {
